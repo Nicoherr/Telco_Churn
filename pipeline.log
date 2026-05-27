@@ -1,0 +1,41 @@
+2026-05-27 14:37:37 | INFO | ★ PIPELINE INICIADO
+2026-05-27 14:37:37 | INFO | ============================================================
+2026-05-27 14:37:37 | INFO | INICIO INGESTION: lectura_csv
+2026-05-27 14:37:37 | INFO | Fuente: IA_Proyecto/data/telco_raw.csv
+2026-05-27 14:37:37 | INFO | KPI | Filas cargadas   : 7043 (esperadas: 7043)
+2026-05-27 14:37:37 | INFO | KPI | Columnas cargadas: 21 (esperadas: 21)
+2026-05-27 14:37:37 | INFO | KPI | Tiempo de carga  : 0.05s
+2026-05-27 14:37:37 | INFO | INGESTION completada ✅
+2026-05-27 14:37:37 | INFO | ============================================================
+2026-05-27 14:37:37 | INFO | INICIO PROCESAMIENTO: transformacion
+2026-05-27 14:37:37 | INFO | T1 | TotalCharges: 11 valores imputados con MonthlyCharges
+2026-05-27 14:37:37 | INFO | T2 | SeniorCitizen: convertido de 0/1 a No/Yes
+2026-05-27 14:37:37 | INFO | T3 | customerID eliminado (anonimización - Ley 21.719)
+2026-05-27 14:37:37 | WARNING | T4 | 22 filas duplicadas eliminadas
+2026-05-27 14:37:37 | INFO | KPI | Registros modificados : 11
+2026-05-27 14:37:37 | INFO | KPI | Nulos residuales      : 0
+2026-05-27 14:37:37 | INFO | KPI | Shape final           : (7021, 20)
+2026-05-27 14:37:37 | INFO | PROCESAMIENTO completado ✅
+2026-05-27 14:37:37 | INFO | ============================================================
+2026-05-27 14:37:37 | INFO | INICIO DATA QUALITY: validacion
+2026-05-27 14:37:37 | INFO | ── Validación estructural
+2026-05-27 14:37:37 | INFO | ✅ Todas las columnas requeridas presentes
+2026-05-27 14:37:37 | INFO | ✅ Sin valores nulos
+2026-05-27 14:37:37 | INFO | ✅ MonthlyCharges es numérico
+2026-05-27 14:37:37 | INFO | ✅ TotalCharges es numérico
+2026-05-27 14:37:37 | INFO | ✅ tenure es numérico
+2026-05-27 14:37:37 | INFO | ── Validación semántica
+2026-05-27 14:37:37 | INFO | ✅ gender: valores válidos
+2026-05-27 14:37:37 | INFO | ✅ SeniorCitizen: valores válidos
+2026-05-27 14:37:37 | INFO | ✅ Partner: valores válidos
+2026-05-27 14:37:37 | INFO | ✅ Dependents: valores válidos
+2026-05-27 14:37:37 | INFO | ✅ PhoneService: valores válidos
+2026-05-27 14:37:37 | INFO | ✅ InternetService: valores válidos
+2026-05-27 14:37:37 | INFO | ✅ Contract: valores válidos
+2026-05-27 14:37:37 | INFO | ✅ Churn: valores válidos
+2026-05-27 14:37:37 | INFO | ✅ Regla PhoneService/MultipleLines consistente
+2026-05-27 14:37:37 | INFO | ✅ tenure dentro de rango [0, 72]
+2026-05-27 14:37:37 | INFO | KPI | Total errores de validación: 0
+2026-05-27 14:37:37 | INFO | DATA QUALITY completada ✅ — datos aptos para carga
+2026-05-27 14:37:37 | INFO | Datos cargados en: IA_Proyecto/data/telco_limpio.csv
+2026-05-27 14:37:37 | INFO | ★ PIPELINE COMPLETADO en 0.14s
