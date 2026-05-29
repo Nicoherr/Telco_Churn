@@ -1,8 +1,3 @@
-"""
-Ingestion - Lectura CSV
-Pipeline DataOps: Telco Customer Churn
-Carga el archivo CSV y verifica integridad de los datos.
-"""
 
 import pandas as pd
 import logging

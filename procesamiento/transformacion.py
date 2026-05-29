@@ -1,16 +1,9 @@
-"""
-Procesamiento - Transformación
-Pipeline DataOps: Telco Customer Churn
-Limpia y transforma los datos crudos para dejarlos listos
-para la validación y posterior carga.
-"""
 
 import pandas as pd
 import logging
 
 
 def transformar(df: pd.DataFrame) -> pd.DataFrame:
-    """Aplica todas las transformaciones de limpieza al DataFrame."""
 
     logging.info("=" * 60)
     logging.info("INICIO PROCESAMIENTO: transformacion")

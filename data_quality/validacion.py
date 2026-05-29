@@ -1,9 +1,3 @@
-"""
-Data Quality - Validación
-Pipeline DataOps: Telco Customer Churn
-Valida la estructura y semántica de los datos procesados
-antes de cargarlos al destino final.
-"""
 
 import pandas as pd
 import logging
