@@ -12,8 +12,8 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S"
 )
 
-RUTA_CSV     = "IA_Proyecto/data/telco_raw.csv"
-FILAS_ESPERADAS   = 7043
+RUTA_CSV = "IA_Proyecto/data/telco_raw.csv"
+FILAS_ESPERADAS = 7043
 COLUMNAS_ESPERADAS = 21
 
 
@@ -33,15 +33,18 @@ def leer_csv(ruta: str = RUTA_CSV) -> pd.DataFrame:
     duracion = (datetime.now() - inicio).total_seconds()
 
     # KPIs de ingesta
-    logging.info(f"KPI | Filas cargadas   : {len(df)} (esperadas: {FILAS_ESPERADAS})")
-    logging.info(f"KPI | Columnas cargadas: {len(df.columns)} (esperadas: {COLUMNAS_ESPERADAS})")
+    logging.info(
+        f"KPI | Filas cargadas   : {len(df)} (esperadas: {FILAS_ESPERADAS})")
+    logging.info(
+        f"KPI | Columnas cargadas: {len(df.columns)} (esperadas: {COLUMNAS_ESPERADAS})")
     logging.info(f"KPI | Tiempo de carga  : {duracion:.2f}s")
 
     if len(df) != FILAS_ESPERADAS:
         logging.warning(f"ALERTA: filas inesperadas ({len(df)})")
 
-    logging.info("INGESTION completada ✅")
-    print(f"✅ Ingesta: {len(df)} filas | {len(df.columns)} columnas | {duracion:.2f}s")
+    logging.info("INGESTION completada ")
+    print(
+        f" Ingesta: {len(df)} filas | {len(df.columns)} columnas | {duracion:.2f}s")
     return df
 
 

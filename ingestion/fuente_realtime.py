@@ -13,7 +13,7 @@ def leer_realtime(n_registros: int = 10) -> pd.DataFrame:
     df_stream = df_full.tail(n_registros).copy()
 
     logging.info(f"KPI | Registros recibidos en stream: {len(df_stream)}")
-    print(f"✅ Stream simulado: {len(df_stream)} registros nuevos recibidos")
+    print(f"Stream simulado: {len(df_stream)} registros nuevos recibidos")
     return df_stream
 
 

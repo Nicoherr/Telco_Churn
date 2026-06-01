@@ -37,21 +37,21 @@ def validar(df: pd.DataFrame) -> bool:
         logging.error(f"FALLA: Columnas faltantes: {faltantes}")
         errores += 1
     else:
-        logging.info("✅ Todas las columnas requeridas presentes")
+        logging.info("Todas las columnas requeridas presentes")
 
     nulos = df.isnull().sum().sum()
     if nulos > 0:
         logging.error(f"FALLA: {nulos} valores nulos residuales")
         errores += 1
     else:
-        logging.info("✅ Sin valores nulos")
+        logging.info("Sin valores nulos")
 
     for col in ["MonthlyCharges", "TotalCharges", "tenure"]:
         if col in df.columns and not pd.api.types.is_numeric_dtype(df[col]):
             logging.error(f"FALLA: {col} debería ser numérico")
             errores += 1
         else:
-            logging.info(f"✅ {col} es numérico")
+            logging.info(f"{col} es numérico")
 
     # ── Validación semántica ───────────────────────────────────────────────────
     logging.info("── Validación semántica")
@@ -63,7 +63,7 @@ def validar(df: pd.DataFrame) -> bool:
                 logging.error(f"FALLA: {col} tiene {invalidos.sum()} valores inválidos")
                 errores += 1
             else:
-                logging.info(f"✅ {col}: valores válidos")
+                logging.info(f"{col}: valores válidos")
 
     # Regla: PhoneService=No → MultipleLines="No phone service"
     r2 = df[(df["PhoneService"] == "No") & (df["MultipleLines"] != "No phone service")]
@@ -71,7 +71,7 @@ def validar(df: pd.DataFrame) -> bool:
         logging.error(f"FALLA: {len(r2)} inconsistencias PhoneService/MultipleLines")
         errores += 1
     else:
-        logging.info("✅ Regla PhoneService/MultipleLines consistente")
+        logging.info("Regla PhoneService/MultipleLines consistente")
 
     # Regla: tenure entre 0 y 72
     fuera = df[(df["tenure"] < 0) | (df["tenure"] > 72)]
@@ -79,15 +79,15 @@ def validar(df: pd.DataFrame) -> bool:
         logging.error(f"FALLA: {len(fuera)} registros con tenure fuera de rango")
         errores += 1
     else:
-        logging.info("✅ tenure dentro de rango [0, 72]")
+        logging.info("tenure dentro de rango [0, 72]")
 
     logging.info(f"KPI | Total errores de validación: {errores}")
 
     if errores == 0:
-        logging.info("DATA QUALITY completada ✅ — datos aptos para carga")
-        print("✅ Validación: todos los checks pasaron (0 errores)")
+        logging.info("DATA QUALITY completada  — datos aptos para carga")
+        print("Validación: todos los checks pasaron (0 errores)")
     else:
-        logging.error(f"DATA QUALITY FALLIDA ❌ — {errores} errores detectados")
-        print(f"❌ Validación fallida: {errores} errores — revisar logs/pipeline.log")
+        logging.error(f"DATA QUALITY FALLIDA — {errores} errores detectados")
+        print(f" Validación fallida: {errores} errores — revisar logs/pipeline.log")
 
     return errores == 0

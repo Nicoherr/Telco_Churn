@@ -24,10 +24,12 @@ def cargar(df):
     logging.info("=" * 60)
     logging.info("INICIO CARGA: SQLite + CSV respaldo")
 
+    print("   Conectando a base de datos SQLite...")  # ← agregar
+
     try:
         # ── Rutas de salida
         os.makedirs("IA_Proyecto/data", exist_ok=True)
-        ruta_db  = "IA_Proyecto/data/telco.db"
+        ruta_db = "IA_Proyecto/data/telco.db"
         ruta_csv = "IA_Proyecto/data/telco_limpio.csv"
 
         inicio = datetime.now()
@@ -42,7 +44,8 @@ def cargar(df):
         filas_cargadas = cursor.fetchone()[0]
         conn.close()
 
-        logging.info(f"C1 | SQLite: {filas_cargadas} filas insertadas en tabla 'clientes'")
+        logging.info(
+            f"C1 | SQLite: {filas_cargadas} filas insertadas en tabla 'clientes'")
         logging.info(f"C2 | Base de datos: {ruta_db}")
 
         # ── CSV de respaldo
@@ -59,11 +62,22 @@ def cargar(df):
 
         # ── Alerta si algo no cuadra
         if filas_cargadas != len(df):
-            logging.warning(f"⚠️  Discrepancia: se esperaban {len(df)} filas, se cargaron {filas_cargadas}")
+            logging.warning(
+                f"Discrepancia: se esperaban {len(df)} filas, se cargaron {filas_cargadas}")
 
-        logging.info("CARGA completada ✅")
+        # ── Prints de resultado  ← agregar todo esto
+        print(f"[OK] Carga: {filas_cargadas} filas insertadas en SQLite")
+        print(f"   Base de datos : {ruta_db}")
+        print(f"   CSV respaldo  : {ruta_csv}")
+        print(f"   Completitud   : {completitud:.1f}%")
+        print(f"   Tiempo        : {duracion:.3f}s")
+
+        logging.info("CARGA completada")
+        return True
+
+        logging.info("CARGA completada ")
         return True
 
     except Exception as e:
-        logging.error(f"❌ Error en carga: {e}")
+        logging.error(f"Error en carga: {e}")
         return False

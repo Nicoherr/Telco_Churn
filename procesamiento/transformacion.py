@@ -34,16 +34,16 @@ def transformar(df: pd.DataFrame) -> pd.DataFrame:
         df = df.drop_duplicates()
         logging.warning(f"T4 | {duplicados} filas duplicadas eliminadas")
     else:
-        logging.info("T4 | Sin duplicados detectados ✅")
+        logging.info("T4 | Sin duplicados detectados ")
 
     # ── KPIs de procesamiento ──────────────────────────────────────────────────
     nulos_restantes = df.isnull().sum().sum()
     logging.info(f"KPI | Registros modificados : {registros_modificados}")
     logging.info(f"KPI | Nulos residuales      : {nulos_restantes}")
     logging.info(f"KPI | Shape final           : {df.shape}")
-    logging.info("PROCESAMIENTO completado ✅")
+    logging.info("PROCESAMIENTO completado")
 
-    print(f"✅ Transformación: {registros_modificados} cambios | {nulos_restantes} nulos residuales | shape {df.shape}")
+    print(f"Transformación: {registros_modificados} cambios | {nulos_restantes} nulos residuales | shape {df.shape}")
     return df
 
 

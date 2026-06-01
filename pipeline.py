@@ -31,7 +31,7 @@ def ejecutar():
     print("=" * 55)
 
     inicio = datetime.now()
-    logging.info("★ PIPELINE INICIADO")
+    logging.info("PIPELINE INICIADO")
     logging.info("=" * 60)
 
     # 1 · Ingestion
@@ -47,8 +47,8 @@ def ejecutar():
     ok = validar(df_procesado)
 
     if not ok:
-        logging.error("★ PIPELINE DETENIDO — validación fallida")
-        print("\n❌ Pipeline detenido. Revisa IA_Proyecto/logs/pipeline.log")
+        logging.error("PIPELINE DETENIDO — validación fallida")
+        print("\nPipeline detenido. Revisa IA_Proyecto/logs/pipeline.log")
         sys.exit(1)
 
     # 4 · Carga
@@ -56,18 +56,18 @@ def ejecutar():
     ok_carga = cargar(df_procesado)
 
     if not ok_carga:
-        logging.error("★ PIPELINE DETENIDO — carga fallida")
-        print("\n❌ Error en carga. Revisa IA_Proyecto/logs/pipeline.log")
+        logging.error("PIPELINE DETENIDO — carga fallida")
+        print("\nError en carga. Revisa IA_Proyecto/logs/pipeline.log")
         sys.exit(1)
 
     duracion = (datetime.now() - inicio).total_seconds()
-    logging.info(f"★ PIPELINE COMPLETADO en {duracion:.2f}s")
+    logging.info(f"PIPELINE COMPLETADO en {duracion:.2f}s")
 
     print("\n" + "=" * 55)
-    print(f"  ✅ Pipeline completado en {duracion:.2f} segundos")
-    print(f"  🗄️  Base de datos : IA_Proyecto/data/telco.db")
-    print(f"  📄 CSV respaldo  : IA_Proyecto/data/telco_limpio.csv")
-    print(f"  📋 Logs          : IA_Proyecto/logs/pipeline.log")
+    print(f"  pipeline completado en {duracion:.2f} segundos")
+    print(f"  Base de datos : IA_Proyecto/data/telco.db")
+    print(f"  CSV respaldo  : IA_Proyecto/data/telco_limpio.csv")
+    print(f"  Logs          : IA_Proyecto/logs/pipeline.log")
     print("=" * 55 + "\n")
 
 
