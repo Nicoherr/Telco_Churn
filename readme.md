@@ -2,7 +2,7 @@
 
 Pipeline de datos para el análisis y procesamiento del dataset
 Telco Customer Churn, desarrollado como proyecto universitario
-para la asignatura ITY1101 Gestión de Datos para IA — DuocUC 2025.
+para la asignatura ITY1101 Gestión de Datos para IA — DuocUC 2026.
 
 ---
 
