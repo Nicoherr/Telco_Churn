@@ -8,7 +8,7 @@ para la asignatura ITY1101 Gestión de Datos para IA — DuocUC 2026.
 
 ## Integrantes
 
-| Nombre 
+| Nombre
 
 Nicolas Herrera
 Rodrigo Villaroel
@@ -25,132 +25,215 @@ los datos, dejándolos listos para un modelo predictivo.
 
 ---
 
-## Estructura del proyecto
+## Requisitos previos
 
-```
-Telco_Churn/
-├── ingestion/
-│   └── lectura_csv.py       # Etapa 1: carga y validación del CSV
-├── procesamiento/
-│   └── transformacion.py    # Etapa 2: limpieza y transformación
-├── data_quality/
-│   └── validacion.py        # Etapa 3: validación estructural y semántica
-├── carga/
-│   └── carga.py             # Etapa 4: carga en SQLite + CSV respaldo
-├── IA_Proyecto/
-│   ├── data/
-│   │   ├── telco_raw.csv    # Dataset original
-│   │   ├── telco_limpio.csv # Dataset procesado
-│   │   └── telco.db         # Base de datos SQLite
-│   └── logs/
-│       └── pipeline.log     # Logs de ejecución
-├── pipeline.py              # Orquestador principal
-├── Dockerfile               # Contenedor Docker
-├── requirements.txt         # Dependencias Python
-└── .env.example             # Variables de entorno
-```
+| Herramienta | Versión mínima | Notas |
+|---|---|---|
+| Python | 3.11 | Incluido en el Codespace |
+| GitHub Codespaces | — | Entorno recomendado |
+| Docker | Cualquiera | Solo si se ejecuta local |
+
+> **Forma recomendada: GitHub Codespaces.**
+> Al abrir el Codespace, el entorno se configura automáticamente y todas las dependencias se instalan solas. No requiere ningún paso adicional.
 
 ---
 
-## Pipeline DataOps
+## Cómo ejecutar (GitHub Codespaces)
 
-### Etapa 1 — Ingesta
-Lee el CSV original y valida que tenga las 7.043 filas
-y 21 columnas esperadas. Genera KPIs de tiempo y volumen.
+### 1. Abrir el Codespace
 
-### Etapa 2 — Limpieza y Transformación
-- Imputa 11 valores vacíos en TotalCharges con MonthlyCharges
-- Estandariza SeniorCitizen de 0/1 a No/Yes
-- Elimina customerID (anonimización — Ley 21.719)
-- Elimina filas duplicadas
+En GitHub, hacer clic en **Code → Codespaces → Create codespace on main**.
 
-### Etapa 3 — Validación Estructural y Semántica
-- Verifica columnas requeridas
-- Valida tipos de datos numéricos
-- Valida valores permitidos en variables categóricas
-- Verifica reglas de negocio (PhoneService/MultipleLines)
-- Verifica rangos numéricos (tenure 0-72)
-
-### Etapa 4 — Carga
-- Inserta los datos limpios en base de datos SQLite
-- Verifica completitud con SELECT COUNT(*)
-- Genera CSV de respaldo
-- Registra KPIs de carga
-
----
-
-## Requisitos
-
-- Docker instalado
-- El archivo telco_raw.csv debe estar en IA_Proyecto/data/
-
----
-
-## Ejecución con Docker
-
-```bash
-# 1. Clonar el repositorio
-git clone https://github.com/Nicoherr/Telco_Churn.git
-cd Telco_Churn
-
-# 2. Construir la imagen
-docker build -t telco-pipeline .
-
-# 3. Ejecutar el pipeline
-docker run telco-pipeline
+El `devcontainer.json` ejecuta automáticamente:
 ```
-
-## Ejecución sin Docker
-
-```bash
 pip install -r requirements.txt
-python pipeline.py
+```
+Esto instala todas las dependencias necesarias. Esperar a que el Codespace termine de configurarse (≈1 minuto).
+
+### 2. Correr el pipeline completo
+
+Abrir la terminal del Codespace y ejecutar:
+
+```bash
+python3 pipeline.py
 ```
 
----
+> ⚠️ **Importante:** usar `python3` y no el botón ▶ de VS Code ni `/usr/bin/python3`.
+> El botón de play puede apuntar a un intérprete distinto que no tiene los paquetes instalados.
 
-## Resultado esperado
+### 3. Salida esperada
 
 ```
 =======================================================
   PIPELINE DATAOPS — TELCO CUSTOMER CHURN
 =======================================================
 
-[1/4] Ingestion...
-[OK] Ingesta: 7043 filas | 21 columnas | 0.02s
+[1/5] Ingestion...
+ Ingesta: 7043 filas | 21 columnas
 
-[2/4] Procesamiento...
-[OK] Transformacion: 11 cambios | 0 nulos residuales | shape (7021, 20)
+[2/5] Procesamiento...
+Transformación: 11 cambios | 0 nulos residuales | shape (7021, 20)
 
-[3/4] Data Quality...
-[OK] Validacion: todos los checks pasaron (0 errores)
+[3/5] Data Quality...
+Validación: todos los checks pasaron (0 errores)
 
-[4/4] Carga...
-   Conectando a base de datos SQLite...
+[4/5] Carga...
 [OK] Carga: 7021 filas insertadas en SQLite
-   Completitud : 100.0%
 
-=======================================================
-  Pipeline completado en 0.14 segundos
+[5/5] Modelo IA...
+[OK] Preparacion: 7021 registros | 19 features
+     Train: 5616 muestras | Test: 1405 muestras
+[OK] Entrenamiento: Random Forest | 5616 muestras
+[OK] Metricas del modelo:
+   Accuracy  : 0.7616
+   Recall    : 0.7366
+   Precision : 0.5362
+   F1 Score  : 0.6206
+   AUC-ROC   : 0.8378
+   Gini      : 0.6755
 =======================================================
 ```
 
 ---
 
-## Seguridad
+## Estructura del proyecto
 
-- customerID eliminado en etapa de transformación (Ley 21.719)
-- Variables de entorno en .env (nunca subir al repositorio)
-- Base de datos local sin exposición externa
+```
+Telco_Churn/
+│
+├── pipeline.py                        # Orquestador principal — punto de entrada
+│
+├── ingestion/
+│   └── lectura_csv.py                 # Etapa 1: carga del CSV raw
+│
+├── procesamiento/
+│   └── transformacion.py              # Etapa 2: limpieza y transformación
+│
+├── data_quality/
+│   └── validacion.py                  # Etapa 3: validación de calidad
+│
+├── carga/
+│   └── carga.py                       # Etapa 4: carga a SQLite y CSV
+│
+├── modelo/
+│   ├── preparacion.py                 # Split train/test + encoding
+│   ├── entrenamiento.py               # Entrenamiento Random Forest
+│   └── metricas.py                    # Métricas y gráficos del modelo
+│
+├── IA_Proyecto/
+│   ├── data/
+│   │   ├── telco_raw.csv              # Dataset original
+│   │   ├── telco_limpio.csv           # CSV procesado (generado por el pipeline)
+│   │   └── telco.db                   # Base de datos SQLite (generada por el pipeline)
+│   ├── modelo/
+│   │   ├── modelo_churn.pkl           # Modelo entrenado (generado por el pipeline)
+│   │   └── graficos/
+│   │       ├── matriz_confusion.png   # Generado por el pipeline
+│   │       └── curva_roc.png          # Generado por el pipeline
+│   └── logs/
+│       └── pipeline.log               # Log completo de ejecución
+│
+├── analisis_univariado_bivariado.ipynb  # Análisis exploratorio (EDA)
+├── metricas_telco.ipynb                 # Análisis de métricas de los 3 modelos
+├── requirements.txt                     # Dependencias del proyecto
+└── .devcontainer/
+    └── devcontainer.json                # Configuración del Codespace
+```
 
 ---
 
-## Tecnologías
+## Dependencias
 
-| Herramienta | Uso |
+Definidas en `requirements.txt` e instaladas automáticamente por el Codespace:
+
+```
+pandas==2.2.2
+numpy==2.4.6
+scikit-learn==1.4.2
+matplotlib==3.9.0
+seaborn==0.13.2
+joblib==1.4.2
+```
+
+Para instalar manualmente (solo si se ejecuta fuera del Codespace):
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Archivos generados por el pipeline
+
+Cada ejecución genera o sobreescribe los siguientes archivos:
+
+| Archivo | Descripción |
 |---|---|
-| Python 3.11  | Lenguaje principal          |
-| Pandas       | Limpieza y transformación   |
-| SQLite       | Base de datos de carga      |
-| Docker       | Contenedorización           |
-| GitHub       | Control de versiones        |
+| `IA_Proyecto/data/telco.db` | Base de datos SQLite con tabla `clientes` |
+| `IA_Proyecto/data/telco_limpio.csv` | Dataset procesado en CSV |
+| `IA_Proyecto/modelo/modelo_churn.pkl` | Modelo Random Forest serializado |
+| `IA_Proyecto/modelo/graficos/matriz_confusion.png` | Gráfico de matriz de confusión |
+| `IA_Proyecto/modelo/graficos/curva_roc.png` | Gráfico de curva ROC |
+| `IA_Proyecto/logs/pipeline.log` | Log detallado de todas las etapas |
+
+---
+
+## Etapas del pipeline
+
+| Etapa | Módulo | Descripción |
+|---|---|---|
+| 1 · Ingestion | `ingestion/lectura_csv.py` | Lee `telco_raw.csv` y valida estructura básica |
+| 2 · Procesamiento | `procesamiento/transformacion.py` | Limpia nulos, corrige tipos, elimina duplicados |
+| 3 · Data Quality | `data_quality/validacion.py` | Verifica integridad y completitud del dataset |
+| 4 · Carga | `carga/carga.py` | Persiste en SQLite (`telco.db`) y CSV de respaldo |
+| 5 · Modelo IA | `modelo/` | Entrena Random Forest y calcula métricas completas |
+
+---
+
+## Métricas del modelo
+
+El modelo entrenado es un **Random Forest** con `class_weight="balanced"` para compensar el desbalance de clases (73% No Churn / 26% Churn).
+
+| Métrica | Valor |
+|---|---|
+| Accuracy | 0.7616 |
+| Recall | 0.7366 |
+| Precision | 0.5362 |
+| F1 Score | 0.6206 |
+| AUC-ROC | 0.8378 |
+| **Gini** | **0.6755** |
+
+> El índice Gini de **0.6755 supera el umbral de 0.60**, lo que indica un modelo con buena capacidad discriminativa para detectar clientes en riesgo de abandono.
+
+---
+
+## Notebooks de análisis
+
+| Notebook | Contenido |
+|---|---|
+| `analisis_univariado_bivariado.ipynb` | EDA completo: estadísticas descriptivas, distribuciones, tasas de churn por variable, matriz de correlación |
+| `metricas_telco.ipynb` | Comparación de 3 modelos (Regresión Logística, Árbol de Decisión, Random Forest) con métricas y curvas ROC/Gini |
+
+Para ejecutarlos, abrir directamente en VS Code o Jupyter dentro del Codespace.
+
+---
+
+## Solución de problemas frecuentes
+
+**Error: `ModuleNotFoundError`**
+Asegurarse de usar `python3` y no el botón ▶ de VS Code:
+```bash
+python3 pipeline.py
+```
+
+**Error: `No module named pip`**
+Instalar con pip3:
+```bash
+pip3 install -r requirements.txt
+```
+
+**El pipeline se detiene en Data Quality**
+Revisar el log para ver qué validación falló:
+```bash
+cat IA_Proyecto/logs/pipeline.log
+```
